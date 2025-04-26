@@ -8,3 +8,6 @@ export * from './types/order/order-item.type';
 export * from './types/order/create-order.type';
 export * from './types/product/product.type';
 export * from './types/product/item.type';
+export * from './types/pay/acceptance-token.type';
+export * from './types/pay/credit-card.type';
+export * from './types/pay/create-wompi-transaction.type';

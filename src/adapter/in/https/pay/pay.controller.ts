@@ -1,13 +1,21 @@
-import { Controller, Post, Param } from '@nestjs/common';
-import { Pay } from 'domain/model';
-import { CreateTransactionHandler } from 'src/handler';
+import { Controller, Post, Param, Get, Body } from '@nestjs/common';
+import { AcceptanceToken, Pay, WompiTransaction } from 'domain/model';
+import {
+  CreateTransactionHandler,
+  CreateWompiTransactionHandler,
+  GetAcceptanceTokenHandler,
+  TokenizeCardHandler,
+} from 'src/handler';
 import { HTTPResponse } from 'src/model/dto';
-// import { PayService } from './pay.service';
+import { CreditCardDTO } from 'src/model/dto/credit-card.dto';
 
 @Controller('pay')
 export class PayController {
   constructor(
     private readonly createTransactionHandler: CreateTransactionHandler,
+    private readonly getAcceptatanceTokenHandler: GetAcceptanceTokenHandler,
+    private readonly tokenizeCardHandler: TokenizeCardHandler,
+    private readonly createWompiTransactionHandler: CreateWompiTransactionHandler,
   ) {}
   @Post('createTransaction/:orderId')
   async createTransaction(
@@ -16,35 +24,27 @@ export class PayController {
     return this.createTransactionHandler.execute(orderId);
   }
 
-  //   @Get('getAcceptanceToken')
-  //   async getAcceptanceToken(): Promise<any> {
-  //     return this.payService.getAcceptanceToken();
-  //   }
-  //   @Post('tokenizeCard')
-  //   async tokenizeCard(
-  //     @Body()
-  //     cardDetails: {
-  //       number: string;
-  //       cvc: string;
-  //       exp_month: string;
-  //       exp_year: string;
-  //       card_holder: string;
-  //     },
-  //   ): Promise<any> {
-  //     return this.payService.tokenizeCard(cardDetails);
-  //   }
-  //   @Post('createGatewayTransaction')
-  //   async createGatewayTransaction(
-  //     @Body()
-  //     data: {
-  //       reference: string;
-  //       installments: number;
-  //       acceptance_token: string;
-  //       id_tokenizacion: string;
-  //     },
-  //   ): Promise<any> {
-  //     return this.payService.createGatewayTransaction(data);
-  //   }
+  @Get('getAcceptanceToken')
+  async getAcceptanceToken(): Promise<HTTPResponse<AcceptanceToken>> {
+    return this.getAcceptatanceTokenHandler.execute();
+  }
+
+  @Post('tokenizeCard')
+  async tokenizeCard(
+    @Body()
+    cardDetails: CreditCardDTO,
+  ): Promise<HTTPResponse> {
+    return this.tokenizeCardHandler.execute(cardDetails);
+  }
+
+  @Post('createGatewayTransaction')
+  async createGatewayTransaction(
+    @Body()
+    data: WompiTransaction,
+  ): Promise<HTTPResponse> {
+    return this.createWompiTransactionHandler.execute(data);
+  }
+
   //   @Post('details')
   //   async getTransactionDetails(
   //     @Body() body: { idTransaction: string },

@@ -3,7 +3,7 @@ import { ItemDto } from './item.dto';
 
 export class CreateOrderDto {
   @IsString()
-  user_id: string;
+  userId: string;
 
   @IsArray()
   items: ItemDto[];

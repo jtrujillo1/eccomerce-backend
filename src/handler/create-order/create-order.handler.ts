@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Order } from 'domain/model';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateOrderUseCase } from 'domain/usecase';
-import { CreateOrderDto } from 'src/model/dto';
+import { CreateOrderDto, HTTPResponse } from 'src/model/dto';
 
 @Injectable()
 export class CreateOrderHandler {
@@ -10,7 +9,17 @@ export class CreateOrderHandler {
     private readonly createOrderUseCase: CreateOrderUseCase,
   ) {}
 
-  async execute(createOrderDto: CreateOrderDto): Promise<Order> {
-    return await this.createOrderUseCase.apply(createOrderDto);
+  async execute(createOrderDto: CreateOrderDto) {
+    const response = await this.createOrderUseCase.apply(
+      createOrderDto.userId,
+      createOrderDto.items,
+    );
+
+    return new HTTPResponse(
+      HttpStatus.OK,
+      'OK',
+      'Solicitud ejecutada correctamente',
+      response,
+    );
   }
 }

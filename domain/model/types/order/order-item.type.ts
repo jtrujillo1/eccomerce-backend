@@ -7,3 +7,5 @@ export type OrderItem = {
   order: Order;
   product: Product;
 };
+
+export type CreateOrderItem = Omit<OrderItem, 'id'>;

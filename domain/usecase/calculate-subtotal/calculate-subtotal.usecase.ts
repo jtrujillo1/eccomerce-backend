@@ -7,7 +7,7 @@ export class CalculateSubtotalUseCase {
     private readonly logger: ILogger,
   ) {}
 
-  async apply(items: Item[]): Promise<number> {
+  async apply(items: Item[]): Promise<{ total: number }> {
     const products = await Promise.all(
       items.map((item) =>
         this.productRepository.getProductsStock(item.productId),
@@ -19,6 +19,6 @@ export class CalculateSubtotalUseCase {
       return acc + product.amountInCents * quantity;
     }, 0);
 
-    return total;
+    return { total };
   }
 }

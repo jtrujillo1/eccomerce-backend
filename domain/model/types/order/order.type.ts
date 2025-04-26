@@ -8,5 +8,5 @@ export type Order = {
   amountInCents: number;
   user: User;
   orderItems: OrderItem[];
-  transaction: Pay;
+  transaction?: Pay;
 };

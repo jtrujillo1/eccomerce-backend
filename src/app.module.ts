@@ -14,20 +14,26 @@ import {
   GetProductsHandler,
   GetUsersHandler,
   UpdateOrderStatusHandler,
+  FindOrCreateUserHandler,
+  CreateTransactionHandler,
 } from './handler';
 import {
   CalculateSubtotalUseCase,
   CreateOrderUseCase,
+  FindOrCreateUserUseCase,
   GetProductsByIdUseCase,
   GetProductsUseCase,
   GetUsersUseCase,
   UpdateOrderStatusUseCase,
 } from 'domain/usecase';
 import {
+  OrderItemRepository,
   OrderRepository,
+  PayRepository,
   ProductRepository,
   UserRepository,
 } from './adapter/out/database/repositories';
+import { CreateTransactionUseCase } from 'domain/usecase/create-transaction/create-transaction.usecase';
 
 @Module({
   imports: [CommonModule, DatabaseModule],
@@ -44,6 +50,8 @@ import {
     GetProductsByIdHandler,
     GetProductsHandler,
     CalculateSubtotaldHandler,
+    FindOrCreateUserHandler,
+    CreateTransactionHandler,
     {
       provide: 'GetUsersUseCase',
       useFactory: (userRepository: UserRepository) => {
@@ -53,10 +61,29 @@ import {
     },
     {
       provide: 'CreateOrderUseCase',
-      useFactory: (orderRepository: OrderRepository) => {
-        return new CreateOrderUseCase(orderRepository, Logger);
+      useFactory: (
+        orderRepository: OrderRepository,
+        userRepository: UserRepository,
+        orderItemRepository: OrderItemRepository,
+        calculateTotalUseCase: CalculateSubtotalUseCase,
+        productRepository: ProductRepository,
+      ) => {
+        return new CreateOrderUseCase(
+          orderRepository,
+          userRepository,
+          orderItemRepository,
+          calculateTotalUseCase,
+          productRepository,
+          Logger,
+        );
       },
-      inject: [OrderRepository],
+      inject: [
+        OrderRepository,
+        UserRepository,
+        OrderItemRepository,
+        'CalculateSubtotalUseCase',
+        ProductRepository,
+      ],
     },
     {
       provide: 'UpdateOrderStatusUseCase',
@@ -86,6 +113,27 @@ import {
       },
       inject: [ProductRepository],
     },
+    {
+      provide: 'FindOrCreateUserUseCase',
+      useFactory: (userRepository: UserRepository) => {
+        return new FindOrCreateUserUseCase(userRepository, Logger);
+      },
+      inject: [UserRepository],
+    },
+    {
+      provide: 'CreateTransactionUseCase',
+      useFactory: (
+        payRepository: PayRepository,
+        orderRepository: OrderRepository,
+      ) => {
+        return new CreateTransactionUseCase(
+          payRepository,
+          orderRepository,
+          Logger,
+        );
+      },
+      inject: [PayRepository, OrderRepository],
+    },
   ],
   exports: [
     GetUsersHandler,
@@ -94,6 +142,8 @@ import {
     GetProductsByIdHandler,
     GetProductsHandler,
     CalculateSubtotaldHandler,
+    FindOrCreateUserHandler,
+    CreateTransactionHandler,
   ],
 })
 export class AppModule {}

@@ -9,7 +9,7 @@ export class CalculateSubtotaldHandler {
     private readonly calculateSubtotalUseCase: CalculateSubtotalUseCase,
   ) {}
 
-  async execute(items: ItemDto[]): Promise<number> {
+  async execute(items: ItemDto[]): Promise<{ total: number }> {
     return await this.calculateSubtotalUseCase.apply(items);
   }
 }

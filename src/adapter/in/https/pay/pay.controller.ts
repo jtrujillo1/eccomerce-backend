@@ -1,13 +1,21 @@
 import { Controller, Post, Param, Get, Body } from '@nestjs/common';
+import { Pay } from 'domain/model';
+import { CreateTransactionHandler } from 'src/handler';
+import { HTTPResponse } from 'src/model/dto';
 // import { PayService } from './pay.service';
 
 @Controller('pay')
 export class PayController {
-  //   constructor(private readonly payService: PayService) {}
-  //   @Post('createTransaction/:orderId')
-  //   async createTransaction(@Param('orderId') orderId: number): Promise<any> {
-  //     return this.payService.createTransaction(orderId);
-  //   }
+  constructor(
+    private readonly createTransactionHandler: CreateTransactionHandler,
+  ) {}
+  @Post('createTransaction/:orderId')
+  async createTransaction(
+    @Param('orderId') orderId: string,
+  ): Promise<HTTPResponse<Pay>> {
+    return this.createTransactionHandler.execute(orderId);
+  }
+
   //   @Get('getAcceptanceToken')
   //   async getAcceptanceToken(): Promise<any> {
   //     return this.payService.getAcceptanceToken();

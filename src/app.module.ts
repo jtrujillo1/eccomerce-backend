@@ -16,14 +16,21 @@ import {
   UpdateOrderStatusHandler,
   FindOrCreateUserHandler,
   CreateTransactionHandler,
+  GetAcceptanceTokenHandler,
+  TokenizeCardHandler,
+  CreateWompiTransactionHandler,
 } from './handler';
 import {
   CalculateSubtotalUseCase,
   CreateOrderUseCase,
+  CreateTransactionUseCase,
+  CreateWompiTransactionUseCase,
   FindOrCreateUserUseCase,
+  GetAcceptanceTokenUseCase,
   GetProductsByIdUseCase,
   GetProductsUseCase,
   GetUsersUseCase,
+  TokenizeCardUseCase,
   UpdateOrderStatusUseCase,
 } from 'domain/usecase';
 import {
@@ -33,10 +40,10 @@ import {
   ProductRepository,
   UserRepository,
 } from './adapter/out/database/repositories';
-import { CreateTransactionUseCase } from 'domain/usecase/create-transaction/create-transaction.usecase';
+import { WompiModule, WompiService } from './adapter/out/services';
 
 @Module({
-  imports: [CommonModule, DatabaseModule],
+  imports: [CommonModule, DatabaseModule, WompiModule],
   controllers: [
     UserController,
     OrderController,
@@ -52,6 +59,9 @@ import { CreateTransactionUseCase } from 'domain/usecase/create-transaction/crea
     CalculateSubtotaldHandler,
     FindOrCreateUserHandler,
     CreateTransactionHandler,
+    GetAcceptanceTokenHandler,
+    TokenizeCardHandler,
+    CreateWompiTransactionHandler,
     {
       provide: 'GetUsersUseCase',
       useFactory: (userRepository: UserRepository) => {
@@ -134,6 +144,34 @@ import { CreateTransactionUseCase } from 'domain/usecase/create-transaction/crea
       },
       inject: [PayRepository, OrderRepository],
     },
+    {
+      provide: 'GetAcceptanceTokenUseCase',
+      useFactory: (wompiService: WompiService) => {
+        return new GetAcceptanceTokenUseCase(wompiService, Logger);
+      },
+      inject: [WompiService],
+    },
+    {
+      provide: 'TokenizeCardUseCase',
+      useFactory: (wompiService: WompiService) => {
+        return new TokenizeCardUseCase(wompiService, Logger);
+      },
+      inject: [WompiService],
+    },
+    {
+      provide: 'CreateWompiTransactionUseCase',
+      useFactory: (
+        wompiService: WompiService,
+        payRepository: PayRepository,
+      ) => {
+        return new CreateWompiTransactionUseCase(
+          wompiService,
+          payRepository,
+          Logger,
+        );
+      },
+      inject: [WompiService, PayRepository, OrderRepository],
+    },
   ],
   exports: [
     GetUsersHandler,
@@ -144,6 +182,9 @@ import { CreateTransactionUseCase } from 'domain/usecase/create-transaction/crea
     CalculateSubtotaldHandler,
     FindOrCreateUserHandler,
     CreateTransactionHandler,
+    GetAcceptanceTokenHandler,
+    TokenizeCardHandler,
+    CreateWompiTransactionHandler,
   ],
 })
 export class AppModule {}

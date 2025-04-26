@@ -1,11 +1,38 @@
 import { Logger } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { IsNumber, IsOptional, validateSync } from 'class-validator';
+import { IsNumber, IsOptional, IsString, validateSync } from 'class-validator';
 
 class EnviromentVariables {
   @IsNumber()
   @IsOptional()
   PORT!: number;
+
+  @IsString()
+  DB_HOST!: string;
+
+  @IsNumber()
+  DB_PORT!: number;
+
+  @IsString()
+  DB_USERNAME!: string;
+
+  @IsString()
+  DB_NAME!: string;
+
+  @IsString()
+  DB_PASSWORD!: string;
+
+  @IsString()
+  WOMPI_BASE_URL!: string;
+
+  @IsString()
+  WOMPI_PUBLIC_KEY!: string;
+
+  @IsString()
+  WOMPI_PRIVATE_KEY!: string;
+
+  @IsString()
+  WOMPI_INTEGRITY_KEY!: string;
 }
 
 export function validate(config: Record<string, unknown>) {

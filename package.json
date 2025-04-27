@@ -21,7 +21,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "npx typeorm-ts-node-commonjs -d dist/src/adapter/out/database/connection/migrations.connection.js",
-    "typeorm:run": "npm run prebuild && npm run build && npm run typeorm migration:run && npm run seed"
+    "typeorm:run": "npm run typeorm migration:run && npm run seed"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.0",

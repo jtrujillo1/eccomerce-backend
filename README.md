@@ -7,6 +7,7 @@ This project is a backend microservice for an ecommerce platform focused on proc
 - **Node.js** with **TypeScript**
 - **NestJS** framework for building scalable server-side applications
 - **TypeORM** as ORM for database interactions
+- **SchemaDatabase** 
 - **PostgreSQL** as the primary relational database
 - **Docker** and **Docker Compose** for containerization and local development
 - **AWS ECS** for deployment with CI/CD via GitHub Actions
@@ -50,6 +51,10 @@ DB_PORT=5432
 DB_USERNAME=your_db_user
 DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
+WOMPI_BASE_URL=
+WOMPI_PUBLIC_KEY=
+WOMPI_PRIVATE_KEY=
+WOMPI_INTEGRITY_KEY=
 ```
 
 ### Installation
@@ -95,27 +100,24 @@ docker-compose up
 ```
 
 ## API Documentation
-Swagger UI is available at: `http://localhost:3000/api`
+Swagger UI is available at: `url/api`
+
+url = 
 
 ## Testing
 
 Run unit and integration tests with Jest:
 
 ```bash
-npm test
+npm test:cov
 ```
 
-Run tests in watch mode:
 
-```bash
-npm run test:watch
-```
+![alt text](image.png)
 
-Run end-to-end tests:
+![alt text](image-1.png)
 
-```bash
-npm run test:e2e
-```
+
 
 ## Linting and Formatting
 
@@ -141,14 +143,33 @@ The project uses GitHub Actions to deploy to AWS ECS on pushes to the `main` bra
 - Runs database migrations inside a container
 - Updates the ECS service to deploy the new version
 
+
+## Database Schema
+
+The database schema consists of the following main tables and their relationships:
+
+- **users**: Stores user information with unique email and creation timestamp.
+- **products**: Stores product details including name, description, stock, image URL, and price in cents.
+- **orders**: Represents customer orders with status, total amount, and relation to the user who placed the order.
+- **order_items**: Items within an order, linking products to orders with quantity.
+- **pay**: Payment transactions related to orders.
+- **pay_log**: Logs related to payment transactions.
+
+### Relationships
+
+- A user can have multiple orders.
+- An order belongs to one user.
+- An order has multiple order items.
+- Each order item links to one product.
+- Each order has one payment transaction.
+
+
 ## Additional Notes
 
-- The project uses a layered architecture with clear separation of concerns.
+- The project uses a hexagonal architecture with clear separation of concerns.
 - Uses NestJS validation pipes globally for input validation.
 - Integrates with Wompi payment gateway via a dedicated service module.
 - Database seeding scripts are available under `src/adapter/out/database/seeds`.
 - Logging is done using NestJS Logger.
 
-## Contact
 
-For questions or contributions, please contact the project maintainer.

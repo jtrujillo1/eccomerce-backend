@@ -41,14 +41,14 @@ jobs:
           REGION=us-east-1
           REPOSITORY=${{ secrets.ECR_REPOSITORY }}
           ECR_URI=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPOSITORY
-          
+
           # Ejecutar migraciones con el contenedor
           docker run --rm \
-            -e DB_HOST=${{ secrets.DB_HOST }} \
-            -e DB_PORT=${{ secrets.DB_PORT }} \
-            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e DB_HOST=$DB_HOST \
+            -e DB_PORT=$DB_PORT \
+            -e DB_USERNAME=$DB_USERNAME \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -e DB_NAME=${{ secrets.DB_NAME }} \
+            -e DB_NAME=$DB_NAME \
             $ECR_URI:$IMAGE_TAG npm run typeorm:run
 
       - name: Actualizar ECS Service

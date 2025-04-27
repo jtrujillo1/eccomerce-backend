@@ -19,6 +19,7 @@ import {
   GetAcceptanceTokenHandler,
   TokenizeCardHandler,
   CreateWompiTransactionHandler,
+  UpdateTransactionHandler,
 } from './handler';
 import {
   CalculateSubtotalUseCase,
@@ -32,6 +33,7 @@ import {
   GetUsersUseCase,
   TokenizeCardUseCase,
   UpdateOrderStatusUseCase,
+  UpdateTransactionUseCase,
 } from 'domain/usecase';
 import {
   OrderItemRepository,
@@ -62,6 +64,7 @@ import { WompiModule, WompiService } from './adapter/out/services';
     GetAcceptanceTokenHandler,
     TokenizeCardHandler,
     CreateWompiTransactionHandler,
+    UpdateTransactionHandler,
     {
       provide: 'GetUsersUseCase',
       useFactory: (userRepository: UserRepository) => {
@@ -172,6 +175,16 @@ import { WompiModule, WompiService } from './adapter/out/services';
       },
       inject: [WompiService, PayRepository, OrderRepository],
     },
+    {
+      provide: 'UpdateTransactionUseCase',
+      useFactory: (
+        payRepository: PayRepository,
+        orderRepository: OrderRepository,
+      ) => {
+        return new UpdateTransactionUseCase(payRepository, orderRepository);
+      },
+      inject: [PayRepository, OrderRepository],
+    },
   ],
   exports: [
     GetUsersHandler,
@@ -185,6 +198,7 @@ import { WompiModule, WompiService } from './adapter/out/services';
     GetAcceptanceTokenHandler,
     TokenizeCardHandler,
     CreateWompiTransactionHandler,
+    UpdateTransactionHandler,
   ],
 })
 export class AppModule {}

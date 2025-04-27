@@ -18,6 +18,8 @@ export class FindOrCreateUserUseCase {
     );
     const user = await this.userRepository.findByEmail(email);
 
+    console.log(user, !!user);
+
     if (user) {
       return { id: user.id, status: 200 };
     } else {

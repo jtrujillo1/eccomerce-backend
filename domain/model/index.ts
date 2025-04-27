@@ -11,3 +11,4 @@ export * from './types/product/item.type';
 export * from './types/pay/acceptance-token.type';
 export * from './types/pay/credit-card.type';
 export * from './types/pay/create-wompi-transaction.type';
+export * from './types/pay/update-transaction.type';

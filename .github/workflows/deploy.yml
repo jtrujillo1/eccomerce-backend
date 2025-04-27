@@ -7,31 +7,34 @@ on:
 
 jobs:
   deploy:
-    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
+      - name: Configurar credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Login to Amazon ECR
+      - name: Login en Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push Docker image
+      - name: Construir y subir imagen Docker a ECR
         run: |
           IMAGE_TAG=latest
-          ECR_REGISTRY=$(aws sts get-caller-identity --query "Account" --output text).dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-          docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
+          ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+          REGION=${{ secrets.AWS_REGION }}
+          REPOSITORY=${{ secrets.ECR_REPOSITORY }}
+          ECR_URI=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPOSITORY
 
-      - name: Update ECS service
+          docker build -t $ECR_URI:$IMAGE_TAG .
+          docker push $ECR_URI:$IMAGE_TAG
+
+      - name: Actualizar ECS Service
         run: |
           aws ecs update-service \
             --cluster ${{ secrets.CLUSTER_NAME }} \

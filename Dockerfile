@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # 6. Compilar TypeScript
-RUN npm run build
+RUN npm run typeorm:run
 
 # 7. Exponer puerto
 EXPOSE 3000
 
-# 8. Comando para correr la app en prod
+# 9. Comando para correr la app en prod
 CMD ["npm", "run", "start:prod"]

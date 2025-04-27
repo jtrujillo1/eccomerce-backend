@@ -13,6 +13,10 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
+      - name: Debug AWS credentials
+        run: aws sts get-caller-identity
+
+
       - name: Configurar credenciales de AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -27,7 +31,7 @@ jobs:
         run: |
           IMAGE_TAG=latest
           ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-          REGION=${{ secrets.AWS_REGION }}
+          REGION=us-east-1
           REPOSITORY=${{ secrets.ECR_REPOSITORY }}
           ECR_URI=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPOSITORY
 

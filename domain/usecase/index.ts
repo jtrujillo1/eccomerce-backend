@@ -9,3 +9,4 @@ export * from './get-acceptance-token/get-acceptance-token.usecase';
 export * from './tokenize-card/tokenize-card.usecase';
 export * from './create-wompi-transaction/create-wompi-transaction.usecase';
 export * from './create-transaction/create-transaction.usecase';
+export * from './update-transaction/update-transaction.usecase';

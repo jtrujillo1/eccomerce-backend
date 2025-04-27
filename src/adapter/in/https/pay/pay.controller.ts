@@ -5,8 +5,13 @@ import {
   CreateWompiTransactionHandler,
   GetAcceptanceTokenHandler,
   TokenizeCardHandler,
+  UpdateTransactionHandler,
 } from 'src/handler';
-import { HTTPResponse } from 'src/model/dto';
+import {
+  HTTPResponse,
+  UpdateTransactionDTO,
+  WompiTransactionDTO,
+} from 'src/model/dto';
 import { CreditCardDTO } from 'src/model/dto/credit-card.dto';
 
 @Controller('pay')
@@ -16,6 +21,7 @@ export class PayController {
     private readonly getAcceptatanceTokenHandler: GetAcceptanceTokenHandler,
     private readonly tokenizeCardHandler: TokenizeCardHandler,
     private readonly createWompiTransactionHandler: CreateWompiTransactionHandler,
+    private readonly updateTransactionHandler: UpdateTransactionHandler,
   ) {}
   @Post('createTransaction/:orderId')
   async createTransaction(
@@ -31,16 +37,14 @@ export class PayController {
 
   @Post('tokenizeCard')
   async tokenizeCard(
-    @Body()
-    cardDetails: CreditCardDTO,
+    @Body() cardDetails: CreditCardDTO,
   ): Promise<HTTPResponse> {
     return this.tokenizeCardHandler.execute(cardDetails);
   }
 
   @Post('createGatewayTransaction')
   async createGatewayTransaction(
-    @Body()
-    data: WompiTransaction,
+    @Body() data: WompiTransactionDTO,
   ): Promise<HTTPResponse> {
     return this.createWompiTransactionHandler.execute(data);
   }
@@ -51,18 +55,11 @@ export class PayController {
   //   ): Promise<any> {
   //     return this.payService.getTransactionDetails(body);
   //   }
-  //   @Post('updateTransaction')
-  //   async updateTransaction(
-  //     @Body()
-  //     body: {
-  //       reference: string;
-  //       type: string;
-  //       finalized_at: string;
-  //       brand: string;
-  //       id: string;
-  //       status: string;
-  //     },
-  //   ): Promise<any> {
-  //     return await this.payService.updateTransaction(body);
-  //   }
+
+  @Post('updateTransaction')
+  async updateTransaction(
+    @Body() body: UpdateTransactionDTO,
+  ): Promise<HTTPResponse> {
+    return this.updateTransactionHandler.execute(body);
+  }
 }

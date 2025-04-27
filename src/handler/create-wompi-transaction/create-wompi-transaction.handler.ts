@@ -1,7 +1,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { WompiTransaction } from 'domain/model';
 import { CreateWompiTransactionUseCase } from 'domain/usecase';
-import { HTTPResponse } from 'src/model/dto';
+import { HTTPResponse, WompiTransactionDTO } from 'src/model/dto';
 
 @Injectable()
 export class CreateWompiTransactionHandler {
@@ -10,7 +9,7 @@ export class CreateWompiTransactionHandler {
     private readonly createWompiTransactionUseCase: CreateWompiTransactionUseCase,
   ) {}
 
-  async execute(createWompiTransaction: WompiTransaction) {
+  async execute(createWompiTransaction: WompiTransactionDTO) {
     const response = await this.createWompiTransactionUseCase.apply(
       createWompiTransaction,
     );

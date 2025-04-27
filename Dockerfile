@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # 6. Compilar TypeScript
-RUN npm run typeorm:run
+RUN npm run build
 
 # 7. Exponer puerto
 EXPOSE 3000

@@ -19,6 +19,9 @@ module.exports = {
     '!**/*.module.ts',
     '!**/main.ts',
     '!**/config/**',
+    '!**/migrations/**',
+    '!**/seeds/**',
+    '!<rootDir>/node_modules/'
   ],
   coverageDirectory: './coverage',
   coverageReporters: ['html', 'lcov', 'cobertura'],

@@ -13,8 +13,6 @@ RUN npm install
 # 5. Copiar el resto del proyecto
 COPY . .
 
-RUN npm run typeorm:run
-
 # 6. Compilar TypeScript
 RUN npm run build
 

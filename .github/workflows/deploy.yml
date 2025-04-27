@@ -26,7 +26,7 @@ jobs:
 
       - name: Construir y subir imagen Docker a ECR
         run: |
-          IMAGE_TAG=backend-eccomerce:latest
+          IMAGE_TAG=backend-eccomerce
           ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
           REGION=us-east-1
           REPOSITORY=${{ secrets.ECR_REPOSITORY }}
